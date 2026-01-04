@@ -27,7 +27,7 @@ class _LearningPageState extends ConsumerState<LearningPage> {
     Future.microtask(
       () => ref
           .read(learningControllerProvider.notifier)
-          .loadModule(widget.moduleId),
+          .loadModule(widget.moduleId, nodeId: widget.nodeId),
     );
   }
 
@@ -39,70 +39,46 @@ class _LearningPageState extends ConsumerState<LearningPage> {
     ref.listen(learningControllerProvider, (previous, next) {
       if (!previous!.isSuccess && next.isSuccess) {
         HapticFeedback.mediumImpact();
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return Dialog(
-              backgroundColor: AppColors.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.check_circle_outline,
-                      color: AppColors.success,
-                      size: 64,
-                    ).animate().scale(
-                      duration: 600.ms,
-                      curve: Curves.elasticOut,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      "Module Completed!",
-                      style: TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                          "+50 XP",
-                          style: TextStyle(
-                            color: Colors.amber,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: 300.ms)
-                        .slideY(begin: 0.5, end: 0),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.textPrimary,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 12,
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppColors.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: AppColors.success.withValues(alpha: 0.5)),
+            ),
+            margin: const EdgeInsets.all(16),
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle, color: AppColors.success),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text(
+                        "Module Completed!",
+                        style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close dialog
-                        Navigator.of(context).pop(); // Back to roadmap
-                      },
-                      child: const Text("Continue"),
-                    ),
-                  ],
+                      Text(
+                        "+50 XP",
+                        style: TextStyle(
+                          color: Colors.amber,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              ],
+            ),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     });

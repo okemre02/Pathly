@@ -61,9 +61,14 @@ class _RoadmapPageState extends ConsumerState<RoadmapPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Rebuilding RoadmapPage...");
     final authState = ref.watch(authProvider);
     final user = authState.user;
-    final completedNodes = user?.completedNodes ?? [];
+
+    // Use the reactive stream for completed nodes
+    final completedNodesAsync = ref.watch(completedNodesStreamProvider);
+    final completedNodes =
+        completedNodesAsync.asData?.value ?? user?.completedNodes ?? [];
 
     // Apply progress to nodes
     final nodes = _getNodesWithProgress(completedNodes);
