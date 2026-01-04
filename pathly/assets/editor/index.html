@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathly Code Editor</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e; /* VS Code Dark */
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #editor-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+        }
+
+        /* Line Numbers */
+        #line-numbers {
+            width: 40px;
+            background-color: #1e1e1e;
+            color: #858585;
+            text-align: right;
+            padding-right: 10px;
+            padding-top: 10px;
+            font-size: 14px;
+            line-height: 20px;
+            border-right: 1px solid #333;
+            user-select: none;
+        }
+
+        /* Text Area */
+        #code-input {
+            flex: 1;
+            background-color: transparent;
+            color: transparent; /* Text is hidden, caret is visible */
+            caret-color: #fff;
+            border: none;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 10px;
+            white-space: pre;
+            overflow: auto;
+            position: absolute;
+            top: 0;
+            left: 40px;
+            width: calc(100% - 40px);
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* Syntax Highlight Render Layer */
+        #code-render {
+            flex: 1;
+            background-color: transparent;
+            color: #d4d4d4;
+            white-space: pre;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 10px;
+            position: absolute;
+            top: 0;
+            left: 40px;
+            width: calc(100% - 40px);
+            height: 100%;
+            pointer-events: none; /* Let clicks pass through to textarea */
+            z-index: 1;
+        }
+
+        /* Simple Syntax Highlighting Classes */
+        .keyword { color: #569cd6; font-weight: bold; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        .function { color: #dcdcaa; }
+        .number { color: #b5cea8; }
+
+    </style>
+</head>
+<body>
+    <div id="editor-container">
+        <div id="line-numbers">1</div>
+        <pre id="code-render"></pre>
+        <textarea id="code-input" spellcheck="false" autocomplete="off"></textarea>
+    </div>
+
+    <script src="setup.js"></script>
+</body>
+</html>
